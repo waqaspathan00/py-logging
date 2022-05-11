@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, render_template, request, flash
 from flask_login import current_user
 from .models import Blog
@@ -22,3 +23,18 @@ def home():
     blogs = Blog.query.all()
     return render_template("home.html", blogs=blogs)
 
+
+@views.route('/delete-blog', methods=['POST'])
+def delete_note():
+    blog = json.loads(request.data)
+    blogId = blog['blogId']
+    blog = Blog.query.get(blogId)
+    if blog:
+        if blog.user_id == current_user.id:
+            db.session.delete(blog)
+            db.session.commit()
+            flash('Deleted blog!', category='success')
+        else:
+            flash("You do not own this blog", category="error")
+
+    return jsonify({})
