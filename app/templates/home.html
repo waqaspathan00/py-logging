@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+    <h1 align="center">Blogs</h1>
+    <ul class="list-group list-group-flush" id="blogs">
+        {% for blog in blogs %}
+            <li class="list-group-item">
+                {{ blog.comment }}
+                <button type="button" class="close" onClick="deleteBlog({{ blog.id }})">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                - {{ blog.owner }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <form method="POST">
+        <textarea name="blog-comment" id="blog" class="form-control"></textarea>
+        <br/>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Add Blog</button>
+        </div>
+    </form>
+{% endblock %}
