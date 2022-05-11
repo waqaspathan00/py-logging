@@ -20,7 +20,7 @@ def application():
         yield application
         db.session.remove()
         # drops the database tables after the test runs
-        # db.drop_all()s
+        # db.drop_all()
 
 
 @pytest.fixture()
