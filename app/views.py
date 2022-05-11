@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import current_user
 from .models import Blog
 from . import db
@@ -15,10 +15,17 @@ def home():
         if len(comment) < 1:
             flash('Blog is too short!', category='error')
         else:
-            new_blog = Blog(comment=comment, user_id=current_user.id, owner=current_user.email)
-            db.session.add(new_blog)
-            db.session.commit()
-            flash('Blog added!', category='success')
+            try:
+                user_id = current_user.id
+                email = current_user.email
+            except:
+                user_id = request.form.get('user-id')
+                email = request.form.get('email')
+            finally:
+                new_blog = Blog(comment=comment, user_id=user_id, owner=email)
+                db.session.add(new_blog)
+                db.session.commit()
+                flash('Blog added!', category='success')
 
     blogs = Blog.query.all()
     return render_template("home.html", blogs=blogs)
