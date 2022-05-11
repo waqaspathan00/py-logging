@@ -4,6 +4,7 @@ import pytest
 import os
 from app import create_app, db
 
+
 @pytest.fixture()
 def application():
     """This makes the app"""
@@ -18,8 +19,9 @@ def application():
         db.create_all()
         yield application
         db.session.remove()
-        #drops the database tables after the test runs
-        #db.drop_all()s
+        # drops the database tables after the test runs
+        # db.drop_all()s
+
 
 @pytest.fixture()
 def client(application):
