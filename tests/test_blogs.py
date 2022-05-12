@@ -26,3 +26,6 @@ def test_delete_blogs(client):
     db.session.commit()
     blogs = Blog.query.all()
     assert not blogs
+
+
+
