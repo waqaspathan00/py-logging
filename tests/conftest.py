@@ -2,6 +2,9 @@
 
 import pytest
 import os
+
+from werkzeug.security import generate_password_hash
+
 from app import create_app, db
 from app.models import User
 
@@ -38,7 +41,7 @@ def new_account(application):
     if not user:
         user = User(
             email="tester@gmail.com",
-            password="testingpass123"
+            password=generate_password_hash("testingpass123", method="sha256")
         )
         db.session.add(user)
         db.session.commit()
