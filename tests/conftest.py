@@ -3,6 +3,7 @@
 import pytest
 import os
 from app import create_app, db
+from app.models import User
 
 
 @pytest.fixture()
@@ -27,3 +28,26 @@ def application():
 def client(application):
     """This makes the http client"""
     return application.test_client()
+
+
+@pytest.fixture()
+def new_account(application):
+    user = User.query.filter_by(email="tester@gmail.com").first()
+
+    # make an account for testing
+    if not user:
+        user = User(
+            email="tester@gmail.com",
+            password="testingpass123"
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    return user
+
+@pytest.fixture
+def delete_user_t(application):
+    user = User.query.filter_by(email="tester@gmail.com").first()
+    db.session.delete(user)
+    db.session.commit()
+    return user
