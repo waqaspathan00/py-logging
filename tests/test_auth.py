@@ -108,3 +108,33 @@ def test_create_user_no_number_in_pass(client):
     assert 'Password must contain atleast 1 number' in data
 
 
+def test_create_user_succesfully(client):
+    """ successfully create a user passing all reqs """
+
+    response = client.post("/sign-up", data={
+        "email": "tester" + str(random.randint(1, 100000)) + "@gmail.com",
+        "password1": "TestingPass123",
+        "password2": "TestingPass123"
+    })
+    data = response.data.decode('utf-8')
+    assert 'Account created!' in data or "Redirecting" in data
+
+
+def test_logging_in_wrong_password(client, new_account):
+    """ logging in with incorrect password """
+    response = client.post("/login", data={
+        "email": "tester@gmail.com",
+        "password": "testingpass",
+    })
+    data = response.data.decode('utf-8')
+    assert 'Incorrect password, try again' in data
+
+
+def test_logging_in_invalid_email(client, new_account):
+    """ logging in with incorrect password """
+    response = client.post("/login", data={
+        "email": "tester" + str(random.randint(1,100000)) + "@gmail.com",
+        "password": "testingpass123",
+    })
+    data = response.data.decode('utf-8')
+    assert 'Email does not exist' in data
