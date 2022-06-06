@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 import logging
 
 views = Blueprint('views', __name__)
@@ -8,10 +8,11 @@ views = Blueprint('views', __name__)
 def home():
     if request.method == 'POST':
         password = request.form.get('password')
+        flash("Check log files")
 
-        if len(password) < 1:
-            logging.error('Blog is too short!')
+        if len(password) < 6:
+            logging.error('Password is too short!')
         else:
-            logging.info('Blog added!')
+            logging.info('Password is valid!')
 
     return render_template("home.html")
